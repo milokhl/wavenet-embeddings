@@ -1,5 +1,5 @@
 import numpy as np
-from os import listdir
+from os import listdir, mkdir
 from os.path import isfile, join, isdir, exists, split
 
 def GetFilesInDir(path, full_path=True):
@@ -31,10 +31,7 @@ def SafeMakeDir(path):
   Checks if a path exists, and creates it if not.
   """
   if not exists(path):
-    print('Path %s does not exist, creating' % path)
-    os.path.mkdir(path)
-  else:
-    print('Path %s already exists, doing nothing' % path)
+    mkdir(path)
 
 def load_batch_encodings(files, sample_length=125):
   """
