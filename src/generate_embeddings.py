@@ -4,7 +4,10 @@ from magenta.models.nsynth.utils import load_audio
 from magenta.models.nsynth.wavenet import fastgen
 from utils import GetFilesInDir
 
-def GenerateRawEmbeddings(input_folder, output_folder, ckpt_path):
+# Define constants here.
+MAX_AUDIO_LENGTH_SECONDS = 2.0
+
+def GenerateEmbeddings(input_folder, output_folder, ckpt_path):
   """
   Get all of the input audio files in data/audio/ and generated embeddings.
   """
@@ -19,7 +22,8 @@ def GenerateRawEmbeddings(input_folder, output_folder, ckpt_path):
     t0 = time.time()
     head, tail = os.path.split(f)
 
-    audio = load_audio(f, sample_length=40000, sr=sr)
+    # Load in audio, cropping beyond max length.
+    audio = load_audio(f, sample_length=sr*MAX_AUDIO_LENGTH_SECONDS, sr=sr)
     sample_length = audio.shape[0]
 
     print('[INFO] Processing file %s: %d samples, %f seconds' % \
@@ -39,5 +43,5 @@ if __name__ == '__main__':
   ckpt_path = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/data/wavenet-ckpt/model.ckpt-200000'
 
   t0 = time.time()
-  GenerateRawEmbeddings(input_folder, output_folder, ckpt_path)
+  GenerateEmbeddings(input_folder, output_folder, ckpt_path)
   print('Done (%f sec).' % (time.time() - t0))
