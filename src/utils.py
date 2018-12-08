@@ -2,6 +2,15 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join, isdir, exists
 
+def GetFilesInDir(path, full_path=True):
+  """
+  Get all filenames in directory. Ignores other directories.
+  """
+  if not full_path:
+    return [f for f in listdir(path) if isfile(join(path, f))]
+  else:
+    return [join(path, f) for f in listdir(path) if isfile(join(path, f))]
+
 def LoadEmbeddingsFromDir(path):
   """
   Loads in all of the .npz embeddings from a specified directory.
