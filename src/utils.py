@@ -61,7 +61,7 @@ def load_batch_encodings(files, sample_length=125):
       data = np.squeeze(data)
     
     length, channels = data.shape
-    
+
     # Add padding or crop if not equal to sample length
     if length < sample_length:
       padded = np.zeros([sample_length, channels])
