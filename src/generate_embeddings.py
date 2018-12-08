@@ -18,12 +18,14 @@ def GenerateEmbeddings(input_folder, output_folder, ckpt_path):
   print('[INFO] Found %d audio files.' % len(audio_files))
 
   sr = 16000 # Wavenet works at 16kHz.
+  max_audio_sample_length = int(sr * MAX_AUDIO_LENGTH_SECONDS)
+
   for i, f in enumerate(audio_files):
     t0 = time.time()
     head, tail = os.path.split(f)
 
     # Load in audio, cropping beyond max length.
-    audio = load_audio(f, sample_length=sr*MAX_AUDIO_LENGTH_SECONDS, sr=sr)
+    audio = load_audio(f, sample_length=max_audio_sample_length, sr=sr)
     sample_length = audio.shape[0]
 
     print('[INFO] Processing file %s: %d samples, %f seconds' % \
@@ -38,6 +40,17 @@ def GenerateEmbeddings(input_folder, output_folder, ckpt_path):
     print('[INFO] Finished in %f sec.' % (time.time() - t0))
 
 if __name__ == '__main__':
+  """
+  If this script is run, it will gather all audio files in data/audio/ and
+  generate embeddings for each of them.
+
+  Note: Output embeddings are placed in generated/raw_embeddings/ and should
+  not be modified!
+  """
+  print('--------------------------------------------')
+  print('-------- Generating raw embeddings ---------')
+  print('--------------------------------------------')
+
   input_folder = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/data/audio/'
   output_folder = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/generated/raw_embeddings/'
   ckpt_path = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/data/wavenet-ckpt/model.ckpt-200000'
