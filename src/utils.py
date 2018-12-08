@@ -65,7 +65,7 @@ def load_batch_encodings(files, sample_length=125):
       padded[:length, :] = data
       batch.append(padded)
     else:
-      batch.append(data[:sample_length])
+      batch.append(data[:sample_length,:])
 
   # Return as an numpy array
   batch = np.array(batch)

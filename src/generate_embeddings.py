@@ -4,13 +4,13 @@ from magenta.models.nsynth.utils import load_audio
 from magenta.models.nsynth.wavenet import fastgen
 from utils import GetFilesInDir
 
-# Define constants here.
-MAX_AUDIO_LENGTH_SECONDS = 2.0
-
 def GenerateEmbeddings(input_folder, output_folder, ckpt_path):
   """
   Get all of the input audio files in data/audio/ and generated embeddings.
   """
+  # Define constants here.
+  MAX_AUDIO_LENGTH_SECONDS = 2.0
+
   print('[INFO] Input folder:', input_folder)
   print('[INFO] Output folder:', output_folder)
 

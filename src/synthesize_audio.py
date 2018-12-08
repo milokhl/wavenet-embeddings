@@ -5,10 +5,13 @@ from magenta.models.nsynth.wavenet import fastgen
 from magenta.models.nsynth.wavenet.fastgen import load_batch
 from utils import LoadEmbeddingsFromDir, GetFilesInDir, load_batch_encodings
 
-def SynthesizeEmbeddings(input_folder, output_folder, ckpt_path):
+def SynthesizeAudio(input_folder, output_folder, ckpt_path):
   """
   Reconstruct audio from temporal embeddings.
   """
+  # Define constants here.
+  MAX_AUDIO_LENGTH_SECONDS = 2.0
+
   print('[INFO] Input folder:', input_folder)
   print('[INFO] Output folder:', output_folder)
 
@@ -16,11 +19,10 @@ def SynthesizeEmbeddings(input_folder, output_folder, ckpt_path):
   npy_files = GetFilesInDir(input_folder, full_path=True)
 
   # Max sample length of 125 encodings * 32 ms = 4 seconds.
-  max_encoding_length = 20
+  max_encoding_length = int(1000.0 * MAX_AUDIO_LENGTH_SECONDS / 32.0)
 
   # Note: this gets renamed to load_batch_encodings in master.
   encodings_batch = load_batch_encodings(npy_files, sample_length=max_encoding_length)
-  print(encodings_batch.shape)
   print('[INFO] Loaded %d embeddings.' % encodings_batch.shape[0])
 
   sr = 16000
@@ -36,6 +38,10 @@ def SynthesizeEmbeddings(input_folder, output_folder, ckpt_path):
 
   # Use the decoder network to reconstruct audio from embeddings.
   # Doing this in batches is much faster.
+  print('[INFO] Synthesizing output audio with %d samples (%f sec)' % \
+        (max_encoding_length, MAX_AUDIO_LENGTH_SECONDS))
+  
+  t0 = time.time()
   fastgen.synthesize(encodings_batch,
                      save_paths=save_paths,
                      samples_per_save=5000,
@@ -53,5 +59,5 @@ if __name__ == '__main__':
   ckpt_path = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/data/wavenet-ckpt/model.ckpt-200000'
 
   t0 = time.time()
-  SynthesizeEmbeddings(input_folder, output_folder, ckpt_path)
+  SynthesizeAudio(input_folder, output_folder, ckpt_path)
   print('Done (%f sec).' % (time.time()-t0))
