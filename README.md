@@ -9,13 +9,7 @@ The key idea behind an autoencoder network is that the learned embedding can rep
 ## Setup
 ```
 sudo apt-get install libasound2-dev libjack-dev # Needed for rtmidi package.
-pip install magenta
-
-# Pip install from Magenta master
-# Copy setup.py into top level directory
-# Changed line 36 to'absl-py >= 0.1.12'
-cd magenta/
-pip install .
+pip install magenta-gpu==0.3.12 # To work with tensorflow 1.10
 ```
 
 ## References
