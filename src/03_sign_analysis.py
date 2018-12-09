@@ -5,7 +5,7 @@ import tensorflow as tf
 from utils import GetFilesInDir, SafeMakeDir
 from synthesize_audio import SynthesizeAudio
 
-def MakeZeroComponentEmbeddings(input_folder, output_folder):
+def MakeComponentFlippedEmbeddings(input_folder, output_folder):
   raw_embeddings = GetFilesInDir(input_folder, full_path=True)
 
   for f in raw_embeddings:
@@ -14,17 +14,17 @@ def MakeZeroComponentEmbeddings(input_folder, output_folder):
     encoding = np.squeeze(np.load(f)) # Remove empty first dimension.
     num_samples = encoding.shape[0]
 
-    # For each component, set to zero and save the modified array.
+    # For each component, flip the sign and save the modified array.
     for i in range(16):
       encoding_cp = np.copy(encoding)
-      encoding_cp[:,i] = 0
+      encoding_cp[:,i] *= -1.0
 
       # Save a modified array for this component.
-      outfile = os.path.join(output_folder, 'zeros_%d_%s' % (i, tail))
+      outfile = os.path.join(output_folder, 'signflip_%d_%s' % (i, tail))
       np.save(outfile, encoding_cp)
 
 if __name__ == '__main__':
-  base_dir = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/generated/01_component_analysis'
+  base_dir = '/home/milo/mit/21M.080-music-tech/wavenet-embeddings/generated/03_sign_analysis'
   input_folder = os.path.join(base_dir, 'raw_embeddings/')
   output_folder = os.path.join(base_dir, 'modified_embeddings/')
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
   SafeMakeDir(output_folder)
 
   # Step 1: process all embeddings.
-  MakeZeroComponentEmbeddings(input_folder, output_folder)
+  MakeComponentFlippedEmbeddings(input_folder, output_folder)
 
   # Step 2: synthesize the modified embeddings back into audio.
   tf.logging.set_verbosity(tf.logging.INFO)
