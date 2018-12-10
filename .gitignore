@@ -2,5 +2,5 @@
 generated/
 *.wav
 data/
-presentation/
+# presentation/
 # results/
