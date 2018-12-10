@@ -16,7 +16,7 @@ def AddVibrato(input_folder, output_folder):
 
     encoding_cp = np.copy(encoding)
 
-    lfo_freq = 10.0 # Hz
+    lfo_freq = 20.0 # Hz
     phase = lfo_freq * 2 * 3.14159 * np.arange(num_samples) / num_samples
     additive_sinewave = np.sin(phase)
 
@@ -26,7 +26,7 @@ def AddVibrato(input_folder, output_folder):
 
       # Add oscillation at 10Hz.
       # Modulate amplitude by small percentage of the average magnitude.
-      encoding_cp[:,i] += 0.1 * mag * additive_sinewave
+      encoding_cp[:,i] += 0.05 * mag * additive_sinewave
 
     # Save a modified array for this component.
     outfile = os.path.join(output_folder, 'vibrato_%s' % tail)
@@ -41,7 +41,7 @@ if __name__ == '__main__':
   SafeMakeDir(output_folder)
 
   # Step 1: process all embeddings.
-  # AddVibrato(input_folder, output_folder)
+  AddVibrato(input_folder, output_folder)
 
   # Step 2: synthesize the modified embeddings back into audio.
   tf.logging.set_verbosity(tf.logging.INFO)
