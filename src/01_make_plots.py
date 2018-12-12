@@ -7,8 +7,8 @@ if __name__ == '__main__':
 
   raw_folder = os.path.join(base_dir, 'raw_embeddings')
   mod_folder = os.path.join(base_dir, 'modified_embeddings')
-  raw_fname = os.path.join(raw_folder, 'Alesis-Fusion-English-Horn-C5.npy')
-  mod_fname = os.path.join(mod_folder, 'zeros_0_Alesis-Fusion-English-Horn-C5.npy')
+  raw_fname = os.path.join(raw_folder, 'banjo.npy')
+  mod_fname = os.path.join(mod_folder, 'zeros_0_banjo.npy')
 
   raw = np.load(raw_fname)
   modified = np.load(mod_fname)

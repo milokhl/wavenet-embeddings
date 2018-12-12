@@ -15,7 +15,7 @@ def AddConstantToAllComponents(input_folder, output_folder):
     num_samples = encoding.shape[0]
 
     encoding_cp = np.copy(encoding)
-    encoding_cp += 0.1
+    # encoding_cp += 0.1
 
     # Save a modified array for this component.
     outfile = os.path.join(output_folder, 'add_0.1_%s' % tail)
